@@ -1,4 +1,4 @@
-const avatarUrl = "https://github.com/hsn8086.png";
+const avatarUrl = "/img/avatar.png";
 const userName = "HSN8086";
 const bio = "Time Limit Exceeded.";
 
