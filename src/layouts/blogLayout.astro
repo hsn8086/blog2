@@ -1,0 +1,57 @@
+---
+import "../styles/global.css";
+import { Separator } from "@/components/ui/separator";
+import ProfileSidebar from "@/components/ProfileSidebar.vue";
+import MobileHeader from "@/components/MobileHeader.astro";
+const { title } = Astro.props;
+---
+
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+            rel="stylesheet"
+        />
+        <title>{title}</title>
+    </head>
+    <body>
+        <div
+            class="flex flex-col-reverse max-w-screen md:flex-row md:overflow-hidden md:h-screen"
+        >
+            <!-- Left: Profile Sidebar (Vue Component) -->
+            <ProfileSidebar
+                client:load
+                class="shrink-0 w-full md:w-auto md:overflow-y-auto md:max-w-72"
+            />
+
+            <!-- Separators -->
+            <Separator
+                orientation="vertical"
+                class="hidden md:block shrink-0"
+            />
+            <Separator
+                orientation="horizontal"
+                class="w-full md:hidden shrink-0"
+            />
+
+            <!-- Right: Blog Content -->
+            <main class="px-8 py-8 grow overflow-x-hidden md:overflow-y-auto">
+                <!-- Mobile Header: Fixed at top -->
+                <div
+                    class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md md:hidden px-8 py-4"
+                >
+                    <MobileHeader />
+                </div>
+
+                <!-- 占位符，防止内容被 fixed 元素遮挡 -->
+                <div class="h-16 md:hidden"></div>
+
+                <slot />
+            </main>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+---
+import "../styles/global.css";
+// Component Imports
+import BlogLayout from "@/layouts/blogLayout.astro";
+import LinkProfile from "@/components/LinkProfile.vue";
+import { links } from "@/blog.config";
+// Full Astro Component Syntax:
+// https://docs.astro.build/basics/astro-components/
+---
+
+<BlogLayout title="HSN's Blog">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <h1
+            class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
+        >
+            Links
+        </h1>
+        <div class="space-y-6">
+            {
+                links.map((link) => (
+                    <LinkProfile
+                        client:load
+                        name={link.name}
+                        description={link.desc}
+                        url={link.url}
+                        avatarUrl={link.avatar}
+                    />
+                ))
+            }
+        </div>
+    </div>
+</BlogLayout>

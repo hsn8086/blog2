@@ -1,26 +1,24 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 // Component Imports
-import Button from '../components/Button.astro';
+import BlogLayout from "@/layouts/blogLayout.astro";
+import Feed from "@/components/Feed.astro";
 
+import { getCollection } from "astro:content";
+const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro + TailwindCSS</title>
-	</head>
-
-	<body>
-		<div class="grid place-items-center h-screen content-center">
-			<Button>Tailwind Button in Astro!</Button>
-			<a href="/markdown-page" class="p-4 underline">Markdown is also supported...</a>
-		</div>
-	</body>
-</html>
+<BlogLayout title="HSN's Blog">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <h1
+            class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
+        >
+            Posts
+        </h1>
+        <Feed posts={posts} />
+    </div>
+</BlogLayout>

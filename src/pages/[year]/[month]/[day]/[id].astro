@@ -1,0 +1,78 @@
+---
+import BlogLayout from "@/layouts/blogLayout.astro";
+import "@/styles/global.css";
+import { Badge } from "@/components/ui/badge";
+import Prose from "@/components/Prose.astro";
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+// 1. 为每个集合条目生成一个新路径
+export async function getStaticPaths() {
+    const posts = await getCollection("blog");
+    return posts.map((post: any) => ({
+        params: {
+            year: post.data.date.getFullYear().toString(),
+            month: (post.data.date.getMonth() + 1).toString().padStart(2, "0"),
+            day: post.data.date.getDate().toString().padStart(2, "0"),
+            id: post.id,
+        },
+        props: { post },
+    }));
+}
+
+// 2. 对于你的模板，你可以直接从 prop 获取条目
+const { post } = Astro.props as { post: CollectionEntry<"blog"> };
+const { Content } = await render(post);
+---
+
+<BlogLayout title={post.data.title}>
+    <div style="max-width: 600px; margin: 40px auto; padding: 0 16px;">
+        <h1
+            class="text-4xl font-extrabold tracking-tight text-balance text-center mb-3"
+        >
+            {post.data.title}
+        </h1>
+        <!-- <div class="flex flex-wrap gap-2 justify-center mb-5">
+            {
+                post.data.tags.map((tag: string) => (
+                    <Badge variant="outline">{tag}</Badge>
+                ))
+            }
+        </div> -->
+        <div
+            class="flex flex-wrap gap-2 justify-center mb-2 text-sm text-muted-foreground"
+        >
+            {post.data.tags.join(" | ")}
+        </div>
+        <p class="text-center text-sm text-muted-foreground mb-10">
+            {
+                post.data.date.toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                })
+            }
+        </p>
+        <Prose> <Content /></Prose>
+    </div>
+</BlogLayout>
+
+<style is:global>
+    /* 1. 处理块级公式：当 .katex 是段落中唯一的子元素时，视为块级公式 */
+    .prose p:has(> .katex:only-child) {
+        overflow-x: auto;
+        overflow-y: hidden;
+        text-align: center; /* 块级公式通常居中 */
+    }
+
+    /* 2. 确保这类公式能够触发滚动 */
+    .prose p:has(> .katex:only-child) .katex {
+        display: inline-block;
+        min-width: min-content;
+    }
+
+    /* 3. 行内公式保持默认，不强制滚动 */
+    .katex {
+        white-space: nowrap;
+    }
+</style>

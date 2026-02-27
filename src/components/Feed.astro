@@ -1,0 +1,39 @@
+---
+// import { getCollection } from "astro:content";
+// const posts = (await getCollection("blog")).sort(
+//     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+// );
+//
+interface FeedProps {
+    data: {
+        title: string;
+        date: Date;
+    };
+    id: string;
+}
+const { posts } = Astro.props as { posts: FeedProps[] };
+---
+
+<div class="space-y-6">
+    <ul class="space-y-1">
+        {
+            posts.map((post) => (
+                <li class="px-4 py-4 rounded-lg w-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <a
+                        href={`/${post.data.date.getFullYear()}/${(post.data.date.getMonth() + 1).toString().padStart(2, "0")}/${post.data.date.getDate().toString().padStart(2, "0")}/${post.id}`}
+                        class="block"
+                    >
+                        <p class="text-xl font-semibold ">{post.data.title}</p>
+                        <p class="text-sm text-muted-foreground mt-1">
+                            {post.data.date.toLocaleDateString("zh-CN", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}
+                        </p>
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</div>

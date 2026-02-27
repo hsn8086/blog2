@@ -1,0 +1,43 @@
+---
+import BlogLayout from "@/layouts/blogLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+let tagsCounter: Record<string, number> = {};
+for (const post of posts) {
+    console.log(post.data.tags);
+    console.log(post.data.title);
+    for (const tag of post.data.tags) {
+        tagsCounter[tag] = (tagsCounter[tag] || 0) + 1;
+    }
+}
+const tags = Object.keys(tagsCounter).sort(
+    (a: string, b: string) => tagsCounter[b] - tagsCounter[a],
+);
+---
+
+<BlogLayout title="HSN's Blog | Tags">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <h1
+            class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
+        >
+            Tags
+        </h1>
+        <div class="space-y-6">
+            <ul class="">
+                {
+                    tags.map((tag) => (
+                        <li class="px-4 py-4 rounded-lg w-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                            <a
+                                href={`/tags/${tag}`}
+                                class="block text-lg font-semibold"
+                            >
+                                {tag} ({tagsCounter[tag]})
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </div>
+</BlogLayout>
