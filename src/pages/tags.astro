@@ -5,8 +5,6 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("blog");
 let tagsCounter: Record<string, number> = {};
 for (const post of posts) {
-    console.log(post.data.tags);
-    console.log(post.data.title);
     for (const tag of post.data.tags) {
         tagsCounter[tag] = (tagsCounter[tag] || 0) + 1;
     }
