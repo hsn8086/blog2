@@ -8,18 +8,21 @@ import { links } from "@/blog.config";
 // https://docs.astro.build/basics/astro-components/
 ---
 
-<BlogLayout title="HSN's Blog">
+<BlogLayout
+    title="友情链接"
+    description="HSN8086 的友情链接与推荐博客。"
+    schemaType="CollectionPage"
+>
     <div class="max-w-2xl mx-auto px-4 py-8">
         <h1
             class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
         >
-            Links
+            友情链接
         </h1>
         <div class="space-y-6">
             {
                 links.map((link) => (
                     <LinkProfile
-                        client:load
                         name={link.name}
                         description={link.desc}
                         url={link.url}

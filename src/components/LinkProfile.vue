@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 interface Props {
     avatarUrl?: string;
     name?: string;
@@ -24,13 +22,18 @@ withDefaults(defineProps<Props>(), {
         class="flex items-center gap-4 p-4 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
     >
         <div class="relative group">
-            <Avatar>
-                <AvatarImage :src="avatarUrl" :alt="name" />
-                <AvatarFallback>{{ name.charAt(0) }}</AvatarFallback>
-            </Avatar>
+            <img
+                :src="avatarUrl"
+                :alt="`${name} 的头像`"
+                width="40"
+                height="40"
+                loading="lazy"
+                decoding="async"
+                class="size-10 shrink-0 rounded-full bg-muted object-cover"
+            />
         </div>
         <div>
-            <p class="font-semibold">{{ name }}</p>
+            <h2 class="font-semibold">{{ name }}</h2>
             <p class="text-sm text-muted-foreground">{{ description }}</p>
         </div>
     </a>

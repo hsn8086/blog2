@@ -1,6 +1,7 @@
 ---
 import BlogLayout from "@/layouts/blogLayout.astro";
 import { getCollection } from "astro:content";
+import { siteName } from "@/blog.config";
 
 const posts = await getCollection("blog");
 let tagsCounter: Record<string, number> = {};
@@ -14,12 +15,16 @@ const tags = Object.keys(tagsCounter).sort(
 );
 ---
 
-<BlogLayout title="HSN's Blog | Tags">
+<BlogLayout
+    title="文章标签"
+    description={`浏览 ${siteName} 的文章标签，按 Python、算法竞赛、Web 开发等主题查找内容。`}
+    schemaType="CollectionPage"
+>
     <div class="max-w-2xl mx-auto px-4 py-8">
         <h1
             class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
         >
-            Tags
+            文章标签
         </h1>
         <div class="space-y-6">
             <ul class="">
@@ -27,7 +32,7 @@ const tags = Object.keys(tagsCounter).sort(
                     tags.map((tag) => (
                         <li class="px-4 py-4 rounded-lg w-full hover:bg-gray-100 dark:hover:bg-gray-800">
                             <a
-                                href={`/tags/${tag}`}
+                                href={`/tags/${encodeURIComponent(tag)}`}
                                 class="block text-lg font-semibold"
                             >
                                 {tag} ({tagsCounter[tag]})

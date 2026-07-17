@@ -1,19 +1,21 @@
 ---
 import BlogLayout from "@/layouts/blogLayout.astro";
 import "@/styles/global.css";
-import { Badge } from "@/components/ui/badge";
 import Prose from "@/components/Prose.astro";
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { createDescription } from "@/lib/seo";
 
 // 1. 为每个集合条目生成一个新路径
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
-    return posts.map((post: any) => ({
+    return posts.map((post) => ({
         params: {
-            year: post.data.date.getFullYear().toString(),
-            month: (post.data.date.getMonth() + 1).toString().padStart(2, "0"),
-            day: post.data.date.getDate().toString().padStart(2, "0"),
+            year: post.data.date.getUTCFullYear().toString(),
+            month: (post.data.date.getUTCMonth() + 1)
+                .toString()
+                .padStart(2, "0"),
+            day: post.data.date.getUTCDate().toString().padStart(2, "0"),
             id: post.id,
         },
         props: { post },
@@ -23,38 +25,63 @@ export async function getStaticPaths() {
 // 2. 对于你的模板，你可以直接从 prop 获取条目
 const { post } = Astro.props as { post: CollectionEntry<"blog"> };
 const { Content } = await render(post);
+const description =
+    post.data.description ??
+    createDescription(
+        post.body ?? "",
+        `${post.data.title}，HSN8086 发布的技术文章。`,
+    );
 ---
 
-<BlogLayout title={post.data.title}>
-    <div style="max-width: 600px; margin: 40px auto; padding: 0 16px;">
-        <h1
-            class="text-4xl font-extrabold tracking-tight text-balance text-center mb-3"
-        >
-            {post.data.title}
-        </h1>
-        <!-- <div class="flex flex-wrap gap-2 justify-center mb-5">
-            {
-                post.data.tags.map((tag: string) => (
-                    <Badge variant="outline">{tag}</Badge>
-                ))
-            }
-        </div> -->
-        <div
-            class="flex flex-wrap gap-2 justify-center mb-2 text-sm text-muted-foreground"
-        >
-            {post.data.tags.join(" | ")}
-        </div>
-        <p class="text-center text-sm text-muted-foreground mb-10">
-            {
-                post.data.date.toLocaleDateString("zh-CN", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                })
-            }
-        </p>
-        <Prose> <Content /></Prose>
-    </div>
+<BlogLayout
+    title={post.data.title}
+    description={description}
+    image={post.data.image}
+    schemaType="BlogPosting"
+    publishedTime={post.data.date}
+    modifiedTime={post.data.updatedDate}
+    tags={post.data.tags}
+    comments={true}
+    katex={post.data.katex}
+>
+    <article style="max-width: 600px; margin: 40px auto; padding: 0 16px;">
+        <header>
+            <h1
+                class="text-4xl font-extrabold tracking-tight text-balance text-center mb-3"
+            >
+                {post.data.title}
+            </h1>
+            <div
+                class="flex flex-wrap gap-2 justify-center mb-2 text-sm text-muted-foreground"
+                aria-label="文章标签"
+            >
+                {
+                    post.data.tags.map((tag) => (
+                        <a
+                            href={`/tags/${encodeURIComponent(tag)}`}
+                            rel="tag"
+                            class="hover:text-foreground hover:underline"
+                        >
+                            {tag}
+                        </a>
+                    ))
+                }
+            </div>
+            <p class="text-center text-sm text-muted-foreground mb-10">
+                <time datetime={post.data.date.toISOString()}>
+                    {
+                        post.data.date.toLocaleDateString("zh-CN", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            timeZone: "UTC",
+                        })
+                    }
+                </time>
+            </p>
+        </header>
+        <Prose><Content /></Prose>
+    </article>
 </BlogLayout>
 
 <style is:global>

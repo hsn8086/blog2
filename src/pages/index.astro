@@ -3,6 +3,7 @@ import "../styles/global.css";
 // Component Imports
 import BlogLayout from "@/layouts/blogLayout.astro";
 import Feed from "@/components/Feed.astro";
+import { siteDescription, siteName } from "@/blog.config";
 
 import { getCollection } from "astro:content";
 const posts = (await getCollection("blog")).sort(
@@ -12,12 +13,12 @@ const posts = (await getCollection("blog")).sort(
 // https://docs.astro.build/basics/astro-components/
 ---
 
-<BlogLayout title="HSN's Blog">
+<BlogLayout title={siteName} description={siteDescription} schemaType="Blog">
     <div class="max-w-2xl mx-auto px-4 py-8">
         <h1
             class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
         >
-            Posts
+            最新文章
         </h1>
         <Feed posts={posts} />
     </div>

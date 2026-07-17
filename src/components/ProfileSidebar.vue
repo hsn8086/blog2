@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Home, Tags, Link } from "lucide-vue-next";
@@ -14,13 +13,15 @@ import { userName, bio, avatarUrl, tags } from "@/blog.config";
     >
         <!-- Avatar -->
         <div class="relative group">
-            <Avatar
-                size="lg"
-                class="h-16 w-16 md:h-24 md:w-24 border-2 border-muted transition-transform duration-300 group-hover:scale-105"
-            >
-                <AvatarImage :src="avatarUrl" alt="avatar" />
-                <AvatarFallback>{{ userName[0].toUpperCase() }}</AvatarFallback>
-            </Avatar>
+            <img
+                :src="avatarUrl"
+                :alt="`${userName} 的头像`"
+                width="96"
+                height="96"
+                fetchpriority="high"
+                decoding="async"
+                class="h-16 w-16 md:h-24 md:w-24 rounded-full border-2 border-muted object-cover transition-transform duration-300 group-hover:scale-105"
+            />
         </div>
 
         <!-- Name & Bio -->

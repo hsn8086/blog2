@@ -1,16 +1,19 @@
-// 1. 从 `astro:content` 导入工具函数
 import { defineCollection } from "astro:content";
-
-// 2. 导入加载器
-import { glob, file } from "astro/loaders";
-
-// 3. 导入 Zod
+import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-// 4. 定义你的集合
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/data/blog" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    katex: z.boolean().default(false),
+    reprintPolicy: z.string().optional(),
+  }),
 });
 
-// 5. 导出一个 `collections` 对象来注册你的集合
 export const collections = { blog };

@@ -1,6 +1,11 @@
 const avatarUrl = "/img/avatar.png";
 const userName = "HSN8086";
 const bio = "Time Limit Exceeded.";
+const siteName = "HSN's Blog";
+const siteDescription =
+  "HSN8086 的个人技术博客，记录 Python、算法竞赛、Web 开发、Linux 与编程实践。";
+const authorUrl = "https://hsn8086.com/";
+const locale = "zh-CN";
 
 const tags = ["ACMer", "Neko", "Python", "FastAPI", "Vue 3", "Arch Linux"];
 /*
@@ -89,4 +94,14 @@ const links = [
     desc: "撥雪尋春，燒燈續晝。",
   },
 ];
-export { userName, bio, avatarUrl, tags, links };
+export {
+  authorUrl,
+  avatarUrl,
+  bio,
+  links,
+  locale,
+  siteDescription,
+  siteName,
+  tags,
+  userName,
+};

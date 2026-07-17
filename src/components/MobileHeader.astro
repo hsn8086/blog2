@@ -1,24 +1,30 @@
 ---
 import { Home, Tags, Link } from "lucide-vue-next";
+
+const pathname = Astro.url.pathname;
 ---
 
-<nav class="flex flex-row justify-center gap-4 w-full md:hidden">
+<nav class="flex flex-row justify-center gap-4 w-full md:hidden" aria-label="主导航">
     <a
         href="/"
-        rel="noopener noreferrer"
+        aria-label="首页"
+        aria-current={pathname === "/" ? "page" : undefined}
         class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
     >
         <Home class="size-5 md:size-4" />
     </a>
     <a
         href="/tags"
+        aria-label="文章标签"
+        aria-current={pathname.startsWith("/tags") ? "page" : undefined}
         class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
     >
         <Tags class="size-5 md:size-4" />
     </a>
     <a
         href="/links"
-        rel="noopener noreferrer"
+        aria-label="友情链接"
+        aria-current={pathname.startsWith("/links") ? "page" : undefined}
         class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
     >
         <Link class="size-5 md:size-4" />

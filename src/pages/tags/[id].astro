@@ -1,7 +1,6 @@
 ---
 import "@/styles/global.css";
-import { getCollection, render } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import BlogLayout from "@/layouts/blogLayout.astro";
 import Feed from "@/components/Feed.astro";
 export async function getStaticPaths() {
@@ -30,17 +29,23 @@ export async function getStaticPaths() {
     }));
 }
 
-const { tag } = Astro.props;
+const { tag } = Astro.props as { tag: string };
 
 const posts = await getCollection("blog");
-const filteredPosts = posts.filter((post) => post.data.tags.includes(tag));
+const filteredPosts = posts
+    .filter((post) => post.data.tags.includes(tag))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BlogLayout title="HSN's Blog | Tag:" +tag>
+<BlogLayout
+    title={`${tag} 相关文章`}
+    description={`浏览 HSN8086 发布的 ${tag} 相关文章，共 ${filteredPosts.length} 篇。`}
+    schemaType="CollectionPage"
+>
     <h1
         class="text-4xl font-extrabold tracking-tight text-balance text-center mb-8"
     >
-        Posts
+        {tag} 相关文章
     </h1>
     <Feed posts={filteredPosts} />
 </BlogLayout>
